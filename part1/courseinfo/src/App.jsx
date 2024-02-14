@@ -1,30 +1,22 @@
 import "./App.css";
+import {useState} from 'react'
 
 function App() {
-
-  const arto = {
-    name: 'Arto Hellas',
-    age: 35,
-    education: 'PhD',
-    greet: function() {
-      console.log('hello, my name is ' + this.name)
-    },
-    doAddition: function(a, b) {
-      console.log(a + b)
-    },
+  const [counter, setCounter] = useState(0)
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [all, setAll] = useState(['L'])
+  const [total, setTotal] = useState(0)
+  
+  
+const hello = (who) => {
+  const handler = () => {
+    console.log('Hello', who)
   }
-  
-  arto.doAddition(1, 4)        // 5 is printed
-  
-  const referenceToAddition = arto.doAddition
-  referenceToAddition(10, 15)   // 25 is printe
-  
-  
-  const referenceToGreet = arto.greet.bind(arto)
-  referenceToGreet()
-  
 
-
+  return handler
+}
+  
   const course = {
     name: "Half Stack application development",
     parts: [
@@ -41,13 +33,21 @@ function App() {
         exercises: 14,
       },
     ],
-  };
+  }
+
+  console.log('i am nnot available')
 
   return (
     <div>
       <Header course={course.name} />
       <Content parts={course.parts} />
       <Total parts={course.parts} />
+
+      <Button title={'button'} handleClick={hello('React')}/>
+      <Button title={'button2'} handleClick={hello('JS')}/>
+      <Button title={'button3'} handleClick={hello('function')}/>
+
+
     </div>
   );
 }
@@ -59,7 +59,7 @@ const Content = ({ parts }) => {
   return (
     <div>
       {parts.map(({ name, exercises }, index) => (
-        <Part exercise={exercises} part={name} key={index} />
+        <Part exercise={exercises} part={name} key={index}  />
       ))}
     </div>
   );
@@ -82,3 +82,9 @@ const Part = ({ exercise, part }) => {
     </p>
   );
 };
+
+const Button = ({title, handleClick}) => {
+  return (
+    <button onClick={handleClick}>{title}</button>
+  )
+}

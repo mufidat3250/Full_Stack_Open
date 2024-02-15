@@ -25,11 +25,6 @@ console.log('random gen', randomGen(),'anecdote length', anecdotes.length, 'last
       console.log(copy)
   }
   let indexOfHigerVote = vote.indexOf(Math.max(...vote))
-  console.log('Index of higher vote', indexOfHigerVote)
-
-
-
-  
   return (
     <div>
       <p style={{padding:'0', margin:'0'}}>{anecdotes[selected]}</p>

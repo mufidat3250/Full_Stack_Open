@@ -33,7 +33,6 @@ const higestVote = (votes) => {
 }
 // alternative to the higestVote
   // let indexOfHigerVote = votes.indexOf(Math.max(...votes))
-  console.log(higestVote(votes))
   return (
     <div>
       <p style={{padding:'0', margin:'0'}}>{anecdotes[selected]}</p>
@@ -43,7 +42,7 @@ const higestVote = (votes) => {
 
       <div>
         <h1>Anecdote with most votes</h1>
-        <p>{anecdotes[indexOfHigerVote]}</p>
+        <p>{anecdotes[votes.indexOf(higestVote(votes))]}</p>
         <p>has {votes[votes.indexOf(higestVote(votes))]} Votes</p>
       </div>
     </div>

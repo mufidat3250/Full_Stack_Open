@@ -23,9 +23,8 @@ export default App;
 const Statistics = ({ good, bad, neutral, all }) => {
   let positive = (6 / all) * 100;
 
-  const average = function (good, neutral = 0, bad = -1) {
-    return (good + neutral + bad) / 3;
-  };
+  const average = (good - bad )/all
+  
   if (all === 0) {
     return <p>No Feedback given</p>;
   }
@@ -36,7 +35,7 @@ const Statistics = ({ good, bad, neutral, all }) => {
         <StatisticLine text={"Neutral"} value={neutral} />
         <StatisticLine text={"Bad"} value={bad} />
         <StatisticLine text={"All"} value={all} />
-        <StatisticLine text={"Average"} value={(good + neutral + bad) / 3} />
+        <StatisticLine text={"Average"} value={average} />
         <StatisticLine
           text={"Positive"}
           value={`${positive === Infinity ? 0 : positive}%`}

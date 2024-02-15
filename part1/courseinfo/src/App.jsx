@@ -2,22 +2,8 @@ import "./App.css";
 import {useState} from 'react'
 
 function App() {
-  const [counter, setCounter] = useState(0)
-  const [left, setLeft] = useState(0)
-  const [right, setRight] = useState(0)
-  const [all, setAll] = useState(['L'])
-  const [total, setTotal] = useState(0)
   
-  
-const hello = (who) => {
-  const handler = () => {
-    console.log('Hello', who)
-  }
-
-  return handler
-}
-  
-  const course = {
+ const course = {
     name: "Half Stack application development",
     parts: [
       {
@@ -35,20 +21,12 @@ const hello = (who) => {
     ],
   }
 
-  console.log('i am nnot available')
-
-  return (
+return (
     <div>
       <Header course={course.name} />
       <Content parts={course.parts} />
       <Total parts={course.parts} />
-
-      <Button title={'button'} handleClick={hello('React')}/>
-      <Button title={'button2'} handleClick={hello('JS')}/>
-      <Button title={'button3'} handleClick={hello('function')}/>
-
-
-    </div>
+  </div>
   );
 }
 

@@ -12,30 +12,39 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
    
-let randomGen = () => Math.floor(Math.random() * anecdotes.length-1 + 1)
-console.log('random gen', randomGen(),'anecdote length', anecdotes.length, 'last index of anecdote',anecdotes.length-1)
-
+const randomAnecdoteIdex = () => Math.floor(Math.random() * anecdotes.length-1 + 1)
   const [selected, setSelected] = useState(0)
-  const [vote, setVote] = useState(Array(8).fill(0))
+  const [votes, setVotes] = useState(Array(8).fill(0))
 
-  const handleVote = () => {
-      let copy = [...vote]
-      copy[selected] = copy[selected] + 1
-      setVote(copy)
-      console.log(copy)
-  }
-  let indexOfHigerVote = vote.indexOf(Math.max(...vote))
+  const handleAddVote = () => {
+      setVotes((prevState)=> {
+        let copy = [...prevState]
+        copy[selected] += 1
+        return copy
+      })
+}
+
+const higestVote = (votes) => {
+  return  votes.reduce((acc, cur)=> {
+    if(acc >= cur) {
+      return acc
+    }else return cur
+  } , 0)
+}
+// alternative to the higestVote
+  // let indexOfHigerVote = votes.indexOf(Math.max(...votes))
+  console.log(higestVote(votes))
   return (
     <div>
       <p style={{padding:'0', margin:'0'}}>{anecdotes[selected]}</p>
-      <p>has {vote[selected]} votes</p>
-      <button onClick={()=> setSelected(randomGen)}>next anecdote</button>
-      <button onClick={handleVote}>Vote</button>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={()=> setSelected(randomAnecdoteIdex)}>next anecdote</button>
+      <button onClick={handleAddVote}>Vote</button>
 
       <div>
         <h1>Anecdote with most votes</h1>
         <p>{anecdotes[indexOfHigerVote]}</p>
-        <p>has {vote[indexOfHigerVote]} Votes</p>
+        <p>has {votes[votes.indexOf(higestVote(votes))]} Votes</p>
       </div>
     </div>
   )

@@ -1,3 +1,86 @@
+import { useEffect, useState } from 'react'
+import Filter from '../components/Filter'
+import Personform from '../components/Personform'
+import Persons from '../components/Persons'
+import axios from 'axios'
+
+const App = () => {
+  let baseUrl = 'http://localhost:3001/persons'
+
+
+  const [persons, setPersons] = useState([]) 
+  const [newName, setNewName] = useState({name:'', number:''})
+  const [filter, setFilter] = useState('')
+
+
+  const getAll = () => {
+      axios.get(baseUrl)
+            .then((response)=> setPersons(response.data))
+            .catch((err)=> console.log(err))
+  }
+ 
+
+  useEffect(()=> {
+      getAll()
+  }, [])
+
+
+  const handleDelete = (id) => {
+      axios.delete(`${baseUrl}/${id}`)
+            .then((res)=> res)
+   let updatedPerson = persons.filter((person)=> person.id !== id)
+   setPersons(updatedPerson)
+}
+
+
+const addPhoneBook = (e) => {
+    e.preventDefault()
+    let newNameTrimmed = newName.name.trim()
+    let newNumberTrimmed = newName.number.trim()
+    let newNameToLowerCase = newNameTrimmed.toLowerCase()
+    if( typeof newNameToLowerCase !== 'string' || newNameToLowerCase.length === 0 || newNumberTrimmed.length === 0){
+      alert('name or number is not valid')
+      return
+    }
+
+    let person = {
+      name: newName.name,
+      number: newName.number
+    }
+    
+  axios.post(baseUrl, person)
+        .then((res)=> setPersons([...persons, res.data]))
+  persons.forEach(({name, _, id})=> {
+    let url = `http://localhost:3001/persons/${id}`
+    let personLowerCase = name.toLowerCase()
+        if(personLowerCase.includes(newNameToLowerCase)){
+          let findPerson = persons.find((person) => person.id === id)
+            let changedPerson = {...findPerson, number:person.number}
+            axios.put(url, changedPerson)
+                .then((res)=> setPersons(persons.map((person)=> person.id !== id? person: res.data)))
+          alert(`${newNameToLowerCase} is already added to phonebook replace the old number with a new one`)
+          return
+        }
+    })
+    setPersons([...persons, person])
+    setNewName({name:'', number:''})
+  }
+
+  const filteredPerson = persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
+  return (
+    <div>
+      <Filter filter = {filter} handleFilter = {setFilter}/>
+      <h2>Phonebook</h2>
+        <Personform newName={newName} nameChange={setNewName} numberChange={setNewName} addPhoneBook={addPhoneBook}/>
+      <h2>Numbers</h2>
+      
+      <Persons persons={filteredPerson} handleDelete={handleDelete}/>
+    </div>
+  )
+}
+
+export default App
+
 // import { useState } from "react";
 // const App = () => {
 //   const [persons, setPersons] = useState([
@@ -78,56 +161,5 @@
 
 
 
-import { useState } from 'react'
-import Filter from '../components/Filter'
-import Personform from '../components/Personform'
-import Persons from '../components/Persons'
-
-const App = () => {
-  const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', number:'040-1234567'}
-  ]) 
-  const [newName, setNewName] = useState({name:'', number:''})
-  const [filter, setFilter] = useState('')
-
-  const addPhoneBook = (e) => {
-    e.preventDefault()
-    let newNameTrimmed = newName.name.trim()
-    let newNumberTrimmed = newName.number.trim()
-    let newNameToLowerCase = newNameTrimmed.toLowerCase()
-    if( typeof newNameToLowerCase !== 'string' || newNameToLowerCase.length === 0 || newNumberTrimmed.length === 0){
-      alert('name or number is not valid')
-      return
-    }
-
-    let person = {
-      name: newName.name,
-      number: newName.number
-    }
-    persons.forEach((person)=> {
-      let personLowerCase = person.name.toLowerCase()
-        if(personLowerCase.includes(newNameToLowerCase)){
-          alert(`${newNameToLowerCase} is already added to phonebook`)
-          return
-        }
-    })
-    setPersons([...persons, person])
-    setNewName({name:'', number:''})
-  }
-const filteredPerson = persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
-console.log(filteredPerson)
-  return (
-    <div>
-      <Filter filter = {filter} handleFilter = {setFilter}/>
-      <h2>Phonebook</h2>
-        <Personform newName={newName} nameChange={setNewName} numberChange={setNewName} addPhoneBook={addPhoneBook}/>
-      <h2>Numbers</h2>
-      
-      <Persons persons={filteredPerson}/>
-    </div>
-  )
-}
-
-export default App
 
 

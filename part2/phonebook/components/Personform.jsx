@@ -1,16 +1,21 @@
 import React from "react";
 
-const Personform = ({newName, nameChange, numberChange, addPhoneBook}) => {
+const Personform = ({newName, nameChange, numberChange, addPhone}) => {
   return (
     <div>
-      <form onSubmit={addPhoneBook}>
+      <form onSubmit={addPhone}>
         <div>
           name:{" "}
           <input
             value={newName.name}
             onChange={(e) => nameChange({ ...newName, name: e.target.value })}
           />
+          {/* <input
+            value={newNote}
+            onChange={(e) => nameChange(e.target.value)}
+          /> */}
         </div>
+
         <div>
           number:{" "}
           <input

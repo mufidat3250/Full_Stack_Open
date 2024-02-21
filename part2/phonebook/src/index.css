@@ -15,3 +15,24 @@
     border: 1px solid red;
     background-color: rgb(239, 232, 232);
 }
+
+
+.successStyle{
+    color: green;
+    background-color: lightgrey;
+    font-size: 20;
+    border-style: "solid";
+    border-radius: 5;
+    padding: 10;
+    margin-bottom: 10;
+  };
+  
+  .errorStyle  {
+    color: "red";
+    background: "lightgrey";
+    font-size: 20;
+    border-style: "solid";
+    border-radius: 5;
+    padding: 10;
+    margin-bottom: 10
+  };

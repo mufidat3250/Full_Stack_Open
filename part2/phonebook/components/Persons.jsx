@@ -1,7 +1,6 @@
 import React from "react";
 
 const Persons = ({ persons, handleDelete}) => {
-  console.log({persons})
   return (
     <div>
       <div>

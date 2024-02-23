@@ -1,42 +1,90 @@
-const express = require('express')
-const app = express() 
+const express = require("express");
+const app = express();
 
-let notes = [
-    {
-      id: 1,
-      content: "HTML is easy",
-      important: true
-    },
-    {
-      id: 2,
-      content: "Browser can execute only JavaScript",
-      important: false
-    },
-    {
-      id: 3,
-      content: "GET and POST are the most important methods of HTTP protocol",
-      important: true
-    },
-    {
-        id: 5,
-        content: "GET and POST are the most important methods of HTTP protocol",
-        important: true
-      }
+//json perser
+app.use(express.json());
 
-  ]
-app.get('/', (request, response)=> {
-    response.send('<h1>Hello wordd</h1>')
-})
-app.get('/api/notes', (request, response)=> {
-    response.json(notes)
-})
-app.get('/api/notes/:id', (request, response)=> {
-    const id = Number(request.params.id )
-    const note = notes.filter((note)=> note.id === id)
-    response.json(note)
-})
+const generateId = () => {
+  return Math.floor(Math.random() * 256);
+};
 
+let persons = [
+  {
+    name: "Arto Hellas",
+    number: "040-123456",
+    id: 1,
+  },
+  {
+    name: "Ada Lovelace",
+    number: "39-44-5323523",
+    id: 2,
+  },
+  {
+    name: "Dan Abramov",
+    number: "12-43-234345",
+    id: 3,
+  },
+  {
+    name: "Mary Poppendieck",
+    number: "39-23-6423122",
+    id: 4,
+  },
+];
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+const date = new Date();
+app.get("/info", (request, response) => {
+  const currentDate = new Date().toLocaleString();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  response.send(`<div>
+    <p>Phonebooss has info for ${persons.length}</p>
+    <p>${currentDate} ${timeZone}</p>
+    </div>`);
+});
+
+app.get("/api/persons", (request, response) => {
+  response.json(persons);
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  let id = Number(request.params.id);
+  const person = persons.find((person) => person.id === id);
+  if (!person) {
+    return response.status(404).end();
+  }
+  response.json(person);
+});
+app.delete("/api/persons/:id", (request, response) => {
+  let id = Number(request.params.id);
+  const deletedPerson = persons.filter((person) => person.id !== id);
+  response.status(204).end();
+});
+
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  console.log(body);
+  let personObject = persons.find((person) => person.name === body.name);
+  console.log({ personObject });
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "Name or Nummber missing",
+    });
+  } else if (personObject) {
+    return response.status(400).json({
+      error: "Name already exist, Name must be unique",
+    });
+  } else {
+    const newPerson = {
+      name: body.name,
+      number: body.number,
+      id: generateId(),
+    };
+    persons = persons.concat(newPerson);
+    response.json(persons);
+  }
+  console.log(persons);
+});
+
+const PORT = 3001;
+app.listen(3001, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

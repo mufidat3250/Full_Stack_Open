@@ -1,8 +1,29 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
+const mogan = require('morgan')
 
 //json perser
 app.use(express.json());
+
+// app.use(mogan('tiny'))
+
+morgan.token('id', function getId (req) {
+  return req.id
+})
+
+app.use(morgan(function (tokens, req, res) {
+  const body = req.body
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(body)
+  ].join(' ')
+}))
+
 
 const generateId = () => {
   return Math.floor(Math.random() * 256);
@@ -43,6 +64,7 @@ app.get("/info", (request, response) => {
 
 app.get("/api/persons", (request, response) => {
   response.json(persons);
+  
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -61,9 +83,7 @@ app.delete("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  console.log(body);
   let personObject = persons.find((person) => person.name === body.name);
-  console.log({ personObject });
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: "Name or Nummber missing",
@@ -81,7 +101,6 @@ app.post("/api/persons", (request, response) => {
     persons = persons.concat(newPerson);
     response.json(persons);
   }
-  console.log(persons);
 });
 
 const PORT = 3001;

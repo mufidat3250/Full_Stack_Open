@@ -1,10 +1,11 @@
 import React from "react";
 
 const Persons = ({ persons, handleDelete}) => {
+  
   return (
     <div>
       <div>
-        {persons.map((person, index) => {
+        { persons.map((person, index) => {
          
          return <div key={index}>
           {person.name} {person.number}

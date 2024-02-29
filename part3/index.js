@@ -1,26 +1,20 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require('cors')
 const app = express();
-const mogan = require('morgan')
 
 //json perser
 app.use(express.json());
-
-// app.use(mogan('tiny'))
-
-morgan.token('id', function getId (req) {
-  return req.id
-})
+app.use(cors())
 
 app.use(morgan(function (tokens, req, res) {
-  const body = req.body
   return [
     tokens.method(req, res),
     tokens.url(req, res),
     tokens.status(req, res),
     tokens.res(req, res, 'content-length'), '-',
     tokens['response-time'](req, res), 'ms',
-    JSON.stringify(body)
+    JSON.stringify(req.body)
   ].join(' ')
 }))
 
@@ -52,6 +46,8 @@ let persons = [
   },
 ];
 
+
+
 const date = new Date();
 app.get("/info", (request, response) => {
   const currentDate = new Date().toLocaleString();
@@ -77,7 +73,7 @@ app.get("/api/persons/:id", (request, response) => {
 });
 app.delete("/api/persons/:id", (request, response) => {
   let id = Number(request.params.id);
-  const deletedPerson = persons.filter((person) => person.id !== id);
+  persons = persons.filter((person) => person.id !== id);
   response.status(204).end();
 });
 

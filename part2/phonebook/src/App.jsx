@@ -2,35 +2,39 @@ import { useEffect, useState } from "react";
 import Filter from "../components/Filter";
 import Personform from "../components/Personform";
 import Persons from "../components/Persons";
-import axios from "axios";
 import Notification from "../components/Notification";
 import perseronSevices from "../src/services";
 
 const App = () => {
-  let baseUrl = "http://localhost:3001/persons";
-
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState({ name: "", number: "" });
   const [filter, setFilter] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const getAll = () => {
-    perseronSevices.getAll().then((res) => setPersons(res.data));
+    perseronSevices
+      .getAll()
+      .then(
+        (data) => {
+          data.length > 0 && data !== "undefined" && setPersons(data)
+        });
   };
-
   useEffect(() => {
     getAll();
-    }, []);
-
+    setErrorMessage(null)
+  }, []);
 
   const addPerson = (e) => {
     e.preventDefault();
-    const targetPerson = persons.filter((person) => person.name === newName.name);
+
+    const targetPerson = persons.filter(
+      (person) => person.name === newName.name
+    );
     const personObject = { ...newName, number: newName.number };
     const personToAdd = {
-      name:newName.name.trim(),
-      number:newName.number.trim()
-    }
-    if(targetPerson.length > 0){
+      name: newName.name.trim(),
+      number: newName.number.trim(),
+    };
+    if (targetPerson.length > 0) {
       if (
         window.confirm(
           `${targetPerson[0].name} is already added to phonebook replace the old number with a new one`
@@ -38,77 +42,79 @@ const App = () => {
       ) {
         perseronSevices
           .update(targetPerson[0].id, personObject)
-          .then((res) =>{
-            console.log(`${res.data.name} successfully updated`)
-            setPersons(persons.map((person)=> person.id !== targetPerson[0].id? person : res.data))
-            setErrorMessage(`${targetPerson[0].name} is Updated successfully`)
-            setNewName({name:'', number:''})
+          .then((updatedPerson) => {
+            console.log(`${updatedPerson.name} successfully updated`)
+            setPersons(
+              persons.map((person) =>
+                person.id !== targetPerson[0].id ? person : updatedPerson
+              )
+            );
+            setErrorMessage(`${targetPerson[0].name} is Updated successfully`);
+            setNewName({ name: "", number: "" });
 
             setTimeout(() => {
-              setErrorMessage(null)
-            }, 3000)
-            
+              setErrorMessage(null);
+            }, 3000);
           })
           .catch((err) => {
-            alert(`${targetPerson[0].name} has already being deleted from the back end`)
-            setPersons(persons.filter((person)=> person.id !== targetPerson[0].id))
+            console.log(err.message);
+            alert(
+              `${targetPerson[0].name} has already being deleted from the back end`
+            );
+            setPersons(
+              persons.filter((person) => person.id !== targetPerson[0].id)
+            );
           });
       }
-    }else {
-        
+    } else {
       perseronSevices
-      .create(personToAdd)
-      .then((res)=> {
-        setPersons(persons.concat(res.data))
-        setNewName({name:'', number:''})
-        setErrorMessage(`Added ${personToAdd.name}`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        
-      })
-      .catch((error)=> {
-        alert(`${targetPerson.name} has already being deleted from the server`)
-        console.log(error)
-      })
+        .create(personToAdd)
+        .then((newPerson) => {
+          console.log({newPerson})
+          setPersons([...persons, newPerson])
+          setNewName({ name: "", number: "" });
+          setErrorMessage(`Added ${personToAdd.name}`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          alert(
+            `${targetPerson.name} has already being deleted from the server`
+          );
+          console.log(error);
+        });
     }
-
   };
 
-  const filteredPerson = persons.filter((person) =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
-  );
+
+  const filteredPerson = persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
+
+  // person.name.toLowerCase().includes(filter.toLowerCase()
 
   const handleDelete = (id) => {
-    const deletedPerson = persons.filter((person)=> person.id === id)
-    console.log(deletedPerson)
-    const personId = deletedPerson[0].id
-    const name = deletedPerson[0].name
+    console.log({ id });
+    const person = persons.filter((person) => person.id === id);
+    const personId = person[0].id;
+    const name = person[0].name;
+    console.log({ personId, name });
     perseronSevices
-      .delete_(`${baseUrl}/${personId}`)
-      .then((res) => console.log({ res }))
+      .deletePerson(id)
+      .then((res) => {
+        res;
+        console.log({ res });
+        setPersons(persons.filter((person)=> person.id !== id))
+      })
       .catch((error) => {
         console.log(error);
-        setErrorMessage(`[ERROR] Information of ${name} has being removed from the server`)
+        setErrorMessage(
+          `[ERROR] Information of ${name} has being removed from the server`
+        );
         setTimeout(() => {
-          setErrorMessage(null)
+          setErrorMessage(null);
         }, 3000);
         setPersons(persons.filter((person) => person.id !== id));
       });
-  };
-
-  const returnNote = () => {
-    if (notes.length > 0) {
-      return notes.map((note, index) => (
-        <Note
-          note={note}
-          toggleImportance={() => toggleImportanceOf(note.id)}
-          key={`note${index}`}
-        />
-      ));
-    } else {
-      return <p>...Loading</p>;
-    }
   };
 
   return (
@@ -129,14 +135,3 @@ const App = () => {
 };
 
 export default App;
-
-const Note = ({ note, toggleImportance }) => {
-  const label = note.important ? "make not important" : "make important";
-
-  return (
-    <li>
-      {note.content}
-      <button onClick={toggleImportance}>{label}</button>
-    </li>
-  );
-};

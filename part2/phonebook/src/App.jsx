@@ -90,8 +90,6 @@ const App = () => {
 
   const filteredPerson = persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
 
-  // person.name.toLowerCase().includes(filter.toLowerCase()
-
   const handleDelete = (id) => {
     console.log({ id });
     const person = persons.filter((person) => person.id === id);

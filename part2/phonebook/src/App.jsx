@@ -58,12 +58,14 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err.message);
-            alert(
-              `${targetPerson[0].name} has already being deleted from the back end`
-            );
-            setPersons(
-              persons.filter((person) => person.id !== targetPerson[0].id)
-            );
+            setErrorMessage(`[ERROR] Number format expected eg 123-43493244 or 12-43493244 `)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 3000)
+            
+            // setPersons(
+            //   persons.filter((person) => person.id !== targetPerson[0].id)
+            // );
           });
       }
     } else {
@@ -79,10 +81,12 @@ const App = () => {
           }, 5000);
         })
         .catch((error) => {
-          alert(
-            `${targetPerson.name} has already being deleted from the server`
-          );
           console.log(error);
+          setErrorMessage(`[ERROR] Person Validation failed${error.message}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+          
         });
     }
   };
@@ -102,6 +106,12 @@ const App = () => {
         res;
         console.log({ res });
         setPersons(persons.filter((person)=> person.id !== id))
+        setErrorMessage(
+          `Information  has being removed from the server`
+        );
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
       })
       .catch((error) => {
         console.log(error);

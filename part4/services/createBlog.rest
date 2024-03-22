@@ -1,0 +1,9 @@
+POST http://localhost:8000/api/blog
+Content-Type: application/json
+
+{
+    "title":"Authomated testing eexplained",
+    "author": "Mufidat",
+    "url" : "MMMMMM",
+    "likes" : 1
+}

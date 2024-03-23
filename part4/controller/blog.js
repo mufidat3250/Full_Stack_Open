@@ -6,10 +6,21 @@ const getBlog = (req, res) => {
 };
 
 const createBlog = async(req, res) => {
-  const blog = new Blog(req.body);
-  console.log(res.body)
+  try {
+    const body = req.body
+    if(!body.name || !body.author){
+     return res.status(400).json({message:'Name or Author is missing'})
+    }
+    if(!body.likes){
+      body.likes = 0
+      console.log(body)
+    }
+    const blog = new Blog(body);
   const saveBlog = await blog.save()
-  res.send(201).json(saveBlog) 
+  res.status(201).json(saveBlog) 
+  } catch (error) {
+    console.log(error)
+  }
 };
 const deleteBlog = async(request, response) => {
   const id = request.params.id

@@ -37,8 +37,7 @@ test('a specific blog is within the returned note', async()=> {
     assert(contents.includes('Node testing eexplained'))
 })
 
-test.only('A valid blog can be added', async()=> {
-    const  blogsAtEnd = await blogInDB()
+test('A valid blog can be added', async()=> {
     const newBlog = {
         title: "async/await simplifies making async calls",
         author: "Mufidat",
@@ -49,16 +48,40 @@ test.only('A valid blog can be added', async()=> {
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
-    
-
-    
-    console.log(blogsAtEnd, blogsAtEnd.length , initialBlogs.length + 1)
+    const  blogsAtEnd = await blogInDB()
     assert.strictEqual(blogsAtEnd.length, initialBlogs.length + 1)
     const contents = blogsAtEnd.map(n => n.title)
     assert(contents.includes('async/await simplifies making async calls'))
 })
 
+test('likes properties missing default to zero', async()=>{
+    const newBlog = {
+        title: "async/await simplifies making async calls",
+        author: "Mufidat",
+        url: "http:localhost:8000/how_to_write_test",
+        likes: 5,
+    }
+    await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+    const blogAtEnd = await blogInDB()
+    assert.strictEqual(blogAtEnd.length, initialBlogs.length + 1)
+    const contents = blogAtEnd.map(n => n.title)
+    assert(contents.includes('async/await simplifies making async calls'))
+})
 
+test.only('blog without name or url property', async()=> {
+    const newBlog = {
+        author: 'Mufidat',
+    }
+    await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const response = await blogInDB()
+    assert.strictEqual(response.length, initialBlogs.length)
+})
 after(async ()=>{
     await mongoose.connection.close()
 })

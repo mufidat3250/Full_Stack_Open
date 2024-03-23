@@ -125,8 +125,8 @@ const App = () => {
       });
   };
 
-  return (
-    <div>
+    return (
+      <>
       <Notification message={errorMessage} />
       <Filter filter={filter} handleFilter={setFilter} />
       <h2>Phonebook</h2>
@@ -138,8 +138,8 @@ const App = () => {
       />
       <h2>Numbers</h2>
       <Persons persons={filteredPerson} handleDelete={handleDelete} />
-    </div>
-  );
+      </>
+    )
 };
 
 export default App;

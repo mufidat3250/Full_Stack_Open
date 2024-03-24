@@ -2,18 +2,18 @@ const Blogs = require('../models/blogModel')
 
 const initialBlogs =[
     {
-        "title": "Learning Local Storage",
-        "author": "Mufidat",
-        "url": "MMMMMM",
-        "likes": 22,
-        "id": "65fc8e5295a563e2c5b61cff"
+        title: "Learning Local Storage",
+        author: "Mufidat",
+        url: "MMMMMM",
+        likes: 22,
+        id: "65fc8e5295a563e2c5b61cff"
     },
     {
-        "title": "Node testing eexplained",
-        "author": "Mufidat",
-        "url": "MMMMMM",
-        "likes": 2,
-        "id": "65fc9a584eec78ec1ab0fa92"
+        title: "Node testing explained",
+        author: "Mufidat",
+        url: "MMMMMM",
+        likes: 2,
+        id: "65fc9a584eec78ec1ab0fa92"
     },
 ]
 

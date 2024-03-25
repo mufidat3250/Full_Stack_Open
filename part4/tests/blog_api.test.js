@@ -2,14 +2,12 @@ const {test, after, beforeEach, describe} = require('node:test')
 const assert = require('node:assert')
 const mongoose = require ('mongoose')
 const superTest = require('supertest')
-const expect = require('expect.js')
 const app = require('../app')
 const Blogs = require('../models/blogModel')
 const {initialBlogs, blogInDB}  = require('./test_helper')
 
 
 const api = superTest(app)
-
 
 describe('When thier is initially some  blog saved', ()=> {
     beforeEach(async () => {
@@ -18,12 +16,11 @@ describe('When thier is initially some  blog saved', ()=> {
         await blogObject.save()
         blogObject = new Blogs(initialBlogs[1])
         await blogObject.save()
-    
     })
 
     test('blogs are returned as json', async()=>{
-        let getAllblog =  await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/)
-        console.log(getAllblog, 'all blog post')
+        await api.get('/api/blogs').expect(200)
+        .expect('Content-Type', /application\/json/)
      })
      test('All blogs list are returned', async()=> {
         const response = await api.get('/api/blogs')
@@ -123,18 +120,19 @@ describe('When thier is initially some  blog saved', ()=> {
     describe('Update a blog', ()=>{
         test('blog updated Successfully', async()=>{
             const allBlogs = await blogInDB()
-            // console.log({allBlogs})
             const blogToUpdate = allBlogs[0]
             const blogObject = {
                 ...blogToUpdate,
-                likes: Number(blogToUpdate.likes) + 1
+                likes:202
             }
-           const result = await api.put(`/api/blogs/${blogToUpdate.id}`)
+         await api.put(`/api/blogs/${blogToUpdate.id}`)
            .send(blogObject)
             .expect(200)
             .expect('Content-Type', /application\/json/)
-            // console.log(result.body, 'blog to update' ,blogToUpdate, blogObject)
-            // assert.strictEqual(result.body.likes , blogToUpdate.likes)
+            const blogAtEnd = await blogInDB()
+
+            const likes = blogAtEnd.map((b)=> b.likes)
+            assert.strictEqual(likes[0], blogObject.likes)
         })
     })
 })

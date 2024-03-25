@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {getBlog, createBlog, deleteBlog, getSingleBlog, updateBlog}  = require('../controller/blog')
+const {getBlog, createBlog, deleteBlog, getSingleBlog, updateBlog}  = require('../controller/blogs')
 
 router.get('/', getBlog)
 router.post('/', createBlog)

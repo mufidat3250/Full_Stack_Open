@@ -20,7 +20,7 @@ const createUser = async(request, response, next)=> {
         const user = new User({
             username,
             name,
-            password
+            passwordHash
         })
     
         const savedUser = await user.save()

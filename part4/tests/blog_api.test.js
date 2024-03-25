@@ -2,6 +2,7 @@ const {test, after, beforeEach, describe} = require('node:test')
 const assert = require('node:assert')
 const mongoose = require ('mongoose')
 const superTest = require('supertest')
+const expect = require('expect.js')
 const app = require('../app')
 const Blogs = require('../models/blogModel')
 const {initialBlogs, blogInDB}  = require('./test_helper')
@@ -33,7 +34,13 @@ describe('When thier is initially some  blog saved', ()=> {
     test('a specific blog is within the returned blogs', async()=> {
         const response = await api.get('/api/blogs')
         const contents = response.body.map((res)=> res.title)
-        assert(contents.includes('Node testing eexplained'))
+        assert(contents.includes('Learning Local Storage'))
+    })
+
+    test('Does each blog have a unique id', async()=> {
+        const blogs = await Blogs.find({})
+        const allblog =  await (await api.get('/api/blogs')).body
+        assert(allblog.map((blog)=> blog.id))
     })
 
     describe('addition of a new blog', ()=> {
@@ -115,15 +122,18 @@ describe('When thier is initially some  blog saved', ()=> {
 
     describe('Update a blog', ()=>{
         test('blog updated Successfully', async()=>{
-            const newBlog = {
-                title: ''
+            const allBlogs = await blogInDB()
+            // console.log({allBlogs})
+            const blogToUpdate = allBlogs[0]
+            const blogObject = {
+                ...blogToUpdate,
+                likes: Number(blogToUpdate.likes) + 1
             }
-            const blogAtStart = await blogInDB()
-            const blogToUpdate = blogAtStart[0]
            const result = await api.put(`/api/blogs/${blogToUpdate.id}`)
+           .send(blogObject)
             .expect(200)
             .expect('Content-Type', /application\/json/)
-            console.log(result.body, 'blog to update' ,blogToUpdate)
+            // console.log(result.body, 'blog to update' ,blogToUpdate, blogObject)
             // assert.strictEqual(result.body.likes , blogToUpdate.likes)
         })
     })

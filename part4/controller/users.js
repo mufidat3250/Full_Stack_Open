@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 
 const getAllUsers = async(request, response, next) => {
     try {
-        const allUser = await User.find({})
+        const allUser = await User.find({}).populate('blogs')
         response.status(200).json(allUser)
     } catch (error) {
         next(error)

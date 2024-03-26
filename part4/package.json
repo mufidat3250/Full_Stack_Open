@@ -18,6 +18,7 @@
     "expect.js": "^0.3.1",
     "express": "^4.19.1",
     "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.2",
     "nodemon": "^3.1.0"
   },

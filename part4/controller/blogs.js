@@ -1,10 +1,22 @@
-const { response } = require("../app");
+require('dotenv').config()
 const Blog = require("../models/blogModel");
-const getBlog = (req, res, next) => {
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken')
+
+
+const getTokenFrom = (request) =>{
+  const authorization = request.get('authorization')
+  if(authorization && authorization.startsWith('Bearer ')){
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
+const getBlog = async(req, res, next) => {
   try {
-    Blog.find({}).then((blogs) => {
-      res.json(blogs);
-    });
+    const response = await Blog.find({}).populate('user')
+    res.json(response)
+    
   } catch (error) {
       next(error)
   }
@@ -13,7 +25,6 @@ const getBlog = (req, res, next) => {
 const createBlog = async(req, res, next) => {
   try {
     const body = req.body
-   
     if(!body.title || !body.url){
       return res.status(400).send({
         error: "title or url is missing",
@@ -22,8 +33,21 @@ const createBlog = async(req, res, next) => {
     if(!body.likes){
       body.likes = 0
     }
-    const blog = new Blog(body);
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET, { expiresIn: 60*60 }
+    )
+    let user = await User.findById(decodedToken.id)
+    console.log({user})
+    const newBlog = {
+      title: body.title,
+      author:body.author,
+      url:body.url,
+      likes:body.likes,
+      user:user._id
+    }
+    const blog = new Blog(newBlog);
     const saveBlog = await blog.save()
+    user.blogs = user.blogs.concat(saveBlog.id)
+    await user.save()
     res.status(201).json(saveBlog) 
     
    } catch (error) {

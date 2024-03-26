@@ -3,15 +3,6 @@ const Blog = require("../models/blogModel");
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken')
 
-
-const getTokenFrom = (request) =>{
-  const authorization = request.get('authorization')
-  if(authorization && authorization.startsWith('Bearer ')){
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 const getBlog = async(req, res, next) => {
   try {
     const response = await Blog.find({}).populate('user')

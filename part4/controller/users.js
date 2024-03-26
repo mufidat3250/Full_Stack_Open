@@ -14,6 +14,16 @@ const createUser = async(request, response, next)=> {
     try {
         const {username,  name, password} = request.body
 
+        console.log(password.length)
+        // const userr = await User
+        if(!username && !password){
+            response.status(400).json({message:"username  and password must be provided"})
+        }
+        if(password.length < 3){
+         response.status(400).json({message:'Password must be at least three character long'})
+         return
+        }
+
         const saltRound = 10
         const passwordHash = await bcrypt.hash(password, saltRound)
     

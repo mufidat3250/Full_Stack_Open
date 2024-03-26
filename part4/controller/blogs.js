@@ -33,10 +33,11 @@ const createBlog = async(req, res, next) => {
     if(!body.likes){
       body.likes = 0
     }
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET, { expiresIn: 60*60 }
+    console.log(req)
+
+    const decodedToken = jwt.verify(req.token, process.env.SECRET, { expiresIn: 60*60 }
     )
     let user = await User.findById(decodedToken.id)
-    console.log({user})
     const newBlog = {
       title: body.title,
       author:body.author,

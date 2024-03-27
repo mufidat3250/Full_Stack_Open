@@ -48,12 +48,6 @@ const deleteBlog = async(request, response, next) => {
   const id = request.params.id
   const user = request.user
   const blog = await Blog.findById(id)
-  console.log('request.user', request.user)
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if(!decodedToken){
-   return response.status(401).send({message:'Token must be provided'})
-  }
   if(blog.user.toString() === user._id.toString()){
     const blogToDelete = await Blog.findByIdAndDelete(id)
       response.status(204).json(blogToDelete)
@@ -61,7 +55,6 @@ const deleteBlog = async(request, response, next) => {
     response.status(401).send({message: "Blog must be deleted by user who created it"})
   }
 } catch (error) {
-  console.log(error)
   next(error)
  }
 }

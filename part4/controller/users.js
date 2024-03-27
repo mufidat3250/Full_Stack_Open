@@ -9,7 +9,6 @@ const getAllUsers = async(request, response, next) => {
         next(error)
     }
 }
-
 const createUser = async(request, response, next)=> {
     try {
         const {username,  name, password} = request.body

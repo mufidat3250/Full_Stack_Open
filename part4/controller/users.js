@@ -13,8 +13,6 @@ const getAllUsers = async(request, response, next) => {
 const createUser = async(request, response, next)=> {
     try {
         const {username,  name, password} = request.body
-
-        console.log(password.length)
         // const userr = await User
         if(!username && !password){
             response.status(400).json({message:"username  and password must be provided"})

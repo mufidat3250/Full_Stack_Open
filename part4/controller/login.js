@@ -2,16 +2,15 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/userModel')
-const { response } = require('../app')
 
 
 const login = async(req, res) => {
     const {username, password} = req.body
     const user = await User.findOne({username})
+    // console.log(user)
     const passwordCorrect = user === null ? false : await bcrypt.compare(password, user.passwordHash)
-    console.log(passwordCorrect)
+    // console.log(passwordCorrect)
     if(!(user && passwordCorrect)){
-        console.log('user must be provided')
         return res.status(401).json({
             error: 'Invalid username or password'
         })

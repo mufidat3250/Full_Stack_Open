@@ -1,9 +1,10 @@
-POST http://localhost:8000/api/blog
+POST http://localhost:8000/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVhc3lwaXp6eSIsImlkIjoiNjYwNDI5MGFiYjBhNGI4MDgzOTI1MDMzIiwiaWF0IjoxNzExNTQ5MTc2fQ.nU8Y7hKp2BOES_PSOWzCkOWA8Cc6kthVQYvE_rSz284
 
 {
-    "title":"Authomated testing eexplained",
-    "author": "Mufidat",
-    "url" : "MMMMMM",
+    "title":"If you are greatful i will increase you",
+    "author": "Mufidat Wahab",
+    "url" : "http://localhost:8000/working for my good",
     "likes" : 1
 }

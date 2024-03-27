@@ -1,7 +1,7 @@
 require('dotenv').config()
 const Blog = require("../models/blogModel");
-const User = require('../models/userModel');
 const jwt = require('jsonwebtoken')
+
 
 const getBlog = async(req, res, next) => {
   try {
@@ -16,6 +16,8 @@ const getBlog = async(req, res, next) => {
 const createBlog = async(req, res, next) => {
   try {
     const body = req.body
+    const user = req.user
+    console.log({user})
     if(!body.title || !body.url){
       return res.status(400).send({
         error: "title or url is missing",
@@ -24,11 +26,6 @@ const createBlog = async(req, res, next) => {
     if(!body.likes){
       body.likes = 0
     }
-    console.log(req)
-
-    const decodedToken = jwt.verify(req.token, process.env.SECRET, { expiresIn: 60*60 }
-    )
-    let user = await User.findById(decodedToken.id)
     const newBlog = {
       title: body.title,
       author:body.author,
@@ -43,16 +40,27 @@ const createBlog = async(req, res, next) => {
     res.status(201).json(saveBlog) 
     
    } catch (error) {
-    console.log(error)
     next(error)
   }
 };
 const deleteBlog = async(request, response, next) => {
  try {
   const id = request.params.id
-  const blogToDelete = await Blog.findByIdAndDelete(id)
-  response.status(204).json(blogToDelete)
- } catch (error) {
+  const user = request.user
+  const blog = await Blog.findById(id)
+  console.log('request.user', request.user)
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if(!decodedToken){
+   return response.status(401).send({message:'Token must be provided'})
+  }
+  if(blog.user.toString() === user._id.toString()){
+    const blogToDelete = await Blog.findByIdAndDelete(id)
+      response.status(204).json(blogToDelete)
+  }else {
+    response.status(401).send({message: "Blog must be deleted by user who created it"})
+  }
+} catch (error) {
   console.log(error)
   next(error)
  }
@@ -88,7 +96,6 @@ const updateBlog = async(req, res, next) => {
     next(error)
   }
 }
-
 
 module.exports = {
   getBlog,

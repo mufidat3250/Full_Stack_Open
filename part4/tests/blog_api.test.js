@@ -12,6 +12,7 @@ const api = superTest(app)
 describe('When thier is initially some  blog saved', ()=> {
     beforeEach(async () => {
         await Blogs.deleteMany({})
+        // some Authentication needs to happen here
         let blogObject = new Blogs(initialBlogs[0])
         await blogObject.save()
         blogObject = new Blogs(initialBlogs[1])

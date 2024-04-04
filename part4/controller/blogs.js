@@ -1,8 +1,5 @@
 require('dotenv').config()
 const Blog = require("../models/blogModel");
-const jwt = require('jsonwebtoken')
-
-
 const getBlog = async(req, res, next) => {
   try {
     const response = await Blog.find({}).populate('user')

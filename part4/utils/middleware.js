@@ -71,5 +71,5 @@ const errorHandler = (error, request, response, next) => {
 } 
 
 module.exports = {
-    errorHandler, requestLogger, unknownEndpoint, tokenExtractor,tokenValidator, userExtractor
+    errorHandler, requestLogger, unknownEndpoint, tokenExtractor, tokenValidator, userExtractor
 }

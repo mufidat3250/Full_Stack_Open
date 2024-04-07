@@ -8,7 +8,7 @@
     {
       "content": "Adding manpower to a late software project makes it later!",
       "id": "21149",
-      "votes": 1
+      "votes": 2
     },
     {
       "content": "The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
@@ -43,7 +43,7 @@
     {
       "id": "d19b",
       "content": "NO be juju be that ",
-      "votes": 5
+      "votes": 8
     },
     {
       "id": "5e4b",
@@ -68,6 +68,11 @@
     {
       "id": "7f1c",
       "content": "I am grateful",
+      "vote": 0
+    },
+    {
+      "id": "52b5",
+      "content": "ccc",
       "vote": 0
     }
   ]

@@ -4,16 +4,16 @@ import { notification} from '../reducers/notification'
 const Anecdotes = () => {
     const anecdotes = useSelector(state => state.Anecdotes)
     const input =  useSelector((state)=> state.Filter)
-    const copiedAnecdote = [...anecdotes].sort((a, b) => b.votes - a.votes).filter((anecdote)=> anecdote.content.toLowerCase().includes(input.toLowerCase()))
+    const sortedAnecdote = [...anecdotes].sort((a, b) => b.votes - a.votes)
     const dispatch = useDispatch()
     const vote = async (anecdote) => {
       dispatch(handleUpdateAnecdote(anecdote))
       dispatch(notification(`You voted ${anecdote.content}`, 3000))
-}
-
-  return (
+    }
+    const filteredAnecdote = sortedAnecdote.filter((anecdote)=> anecdote.content.toLowerCase().includes(input.toLowerCase()))
+return (
     <div>
-      {copiedAnecdote.map(anecdote =>
+      {filteredAnecdote.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}

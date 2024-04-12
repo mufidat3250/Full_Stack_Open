@@ -1,0 +1,75 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "custom-hooks are awesome!"
+    },
+    {
+      "id": 2,
+      "content": "best feature ever <3"
+    },
+    {
+      "content": "Alhamdullilah",
+      "id": 3
+    },
+    {
+      "content": "Everything will be Alright",
+      "id": 4
+    },
+    {
+      "content": "Everything will be Alright",
+      "id": 5
+    },
+    {
+      "content": "Everything will be Alright",
+      "id": 6
+    },
+    {
+      "content": "in the end i will be fine",
+      "id": 7
+    },
+    {
+      "content": "in the end i will be fine",
+      "id": 8
+    },
+    {
+      "content": "in the end i will be fine",
+      "id": 9
+    },
+    {
+      "content": "kkk",
+      "id": 10
+    },
+    {
+      "content": "kkk",
+      "id": 11
+    }
+  ],
+  "persons": [
+    {
+      "id": 1,
+      "name": "mluukkai",
+      "number": "040-5483923"
+    },
+    {
+      "id": 2,
+      "name": "hellas",
+      "number": "012-123123"
+    },
+    {
+      "name": "making sense ",
+      "number": "I am progressing",
+      "id": 3
+    },
+    {
+      "name": "making sense ",
+      "number": "I am progressing",
+      "id": 4
+    },
+    {
+      "name": "making sense ",
+      "number": "I am progressing",
+      "id": 5
+    }
+  ]
+}

@@ -105,7 +105,7 @@ describe('When thier is initially some  blog saved', ()=> {
         })
 
     })
-    describe('deletion of a note', ()=>{
+    describe('deletion of a blog', ()=>{
         test('succed with status code 204 if the id is valid', async()=>{
             const blogAtStart = await blogInDB()
             const blogToDelete = blogAtStart[0]
